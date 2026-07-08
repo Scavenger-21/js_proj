@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model RequestHistory {
+  id              String   @id @default(cuid())
+  method          String
+  url             String
+  headers         String
+  body            String?
+  statusCode      Int
+  responseBody    String
+  responseHeaders String
+  responseTime    Int      // milliseconds
+  responseSize    Int      // bytes
+  isSuccess       Boolean
+  createdAt       DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+  @@index([isSuccess])
+  @@index([url])
+  @@index([method])
+  @@map("request_history")
+}
